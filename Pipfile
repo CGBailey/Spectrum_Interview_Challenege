@@ -9,6 +9,8 @@ verify_ssl = true
 graphene = "*"
 flask = "*"
 sqlalchemy = "*"
+flask-migrate = "*"
+flask-sqlalchemy = "*"
 
 [requires]
 python_version = "3.7"
