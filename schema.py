@@ -2,30 +2,10 @@ import graphene
 from graphene import relay
 from graphene_sqlalchemy import SQLAlchemyObjectType, SQLAlchemyConnectionField
 from .models import db_session, UserAddress as UserAddressModel, Users as UserModel, Posts as PostModel, Comments as CommentModel
+from .mutations import UpdatePost, DeletePost
+from .query_types import UserAddress, Users, Posts, Comments
 
 
-class UserAddress(SQLAlchemyObjectType):
-    class Meta:
-        model = UserAddressModel
-        interfaces = (relay.Node, )
-
-
-class Users(SQLAlchemyObjectType):
-    class Meta:
-        model = UserModel
-        interfaces = (relay.Node, )
-
-
-class Posts(SQLAlchemyObjectType):
-    class Meta:
-        model = PostModel
-        interfaces = (relay.Node, )
-
-
-class Comments(SQLAlchemyObjectType):
-    class Meta:
-        model = CommentModel
-        interfaces = (relay.Node, )
 
 
 
@@ -54,5 +34,8 @@ class Query(graphene.ObjectType):
     def resolve_comment_by_id(self, info, comment_id=None):
         return db_session.query(CommentModel).filter_by(id=comment_id).first()
 
+class Mutation(graphene.ObjectType):
+    update_post = UpdatePost.Field()
+    delete_post = DeletePost.Field()
 
-schema = graphene.Schema(query=Query)
+schema = graphene.Schema(query=Query, mutation=Mutation)
